@@ -1,11 +1,11 @@
 # Minimal CMake project template for STM32F0
 
-Trying to make the smallest possible template for C++ project for STM32F0 MCU family built with CMake.
+Trying to make the smallest possible template for C++ project for STM32F0 MCU family (using Standard Peripheral Library for peripheral devices access) built with CMake.
 
 Requirements
 ------------
 - GCC-based toolchain for ARM Cortex-M0 (e.g. [the official one](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads))
-- STM32F0 Discovery kit [firmware package](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32-standard-peripheral-library-expansion/stsw-stm32049.html)
+- [STM32F0 Standard Peripheral Library](http://www.st.com/content/st_com/en/products/embedded-software/mcus-embedded-software/stm32-embedded-software/stm32-standard-peripheral-libraries/stsw-stm32048.html)
 
 Preparation steps
 -----------------
@@ -19,13 +19,16 @@ mv -v stm32f0-cmake-cpp-template my_project
 > which arm-none-eabi-c++
 /usr/cross/arm/cortex-m0/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-c++
 ```
-3. Enter the project template, create build directory and configure the build with specified absolute path to the unpacked STM32F0 firmware package:
+3. Enter the project template, create build directory and configure the build with specified absolute path to the unpacked STM32F0 Standard Peripheral Library:
 ```
 cd my_project
 mkdir build && cd build
-cmake -DSTM_FIRMWARE_PATH=<path-to-the-directory-where-you-unpacked-stm-firmware-archive> ..
+cmake -DSTD_PERIPHERAL_LIBRARY_PATH=<path-to-the-directory-where-you-unpacked-stm-periph-lib-archive> ..
 make
 ```
+
+If desired, you can also change the STM32 device value with specifying `DEVICE` CMake variable (default value is `STM32F030`).
+
 Test program blinking the blue LED on Discovery board will be built.
 
 4. (Optional) Flash the program with e.g. [st-link](https://github.com/texane/stlink):
@@ -38,6 +41,6 @@ What's inside
 * **./cmake**
 	- toolchain.cmake - CMake toolchain file with the necessary settings for compilation and linking
 	- binary_targets.cmake - a couple of custom targets for creating `*.bin` and `*.hex` binaries along with default ELF output
-* **./firmware** - directory for building STM32F0 firmware static library to link the project with, in order to have access to peripherals of the MCU
+* **./firmware** - directory for building static STM32F0 Standard Peripheral Library to link the project with, in order to have access to peripherals of the MCU
 	- stm32f0xx_conf.h - file with inclusions of all the firmware peripheral library headers and `assert_param` marco definition, which are necessary to build something with firmware peripheral library (including itself); usually found in each demonstration project of the firmware
 * **./system** - necessary boilerplate and startup code and linking scripts taken untouched from [stm32f0-discovery-basic-template](https://github.com/szczys/stm32f0-discovery-basic-template). Please, consult its README for additional information.
